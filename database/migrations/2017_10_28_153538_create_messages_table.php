@@ -17,7 +17,7 @@ class CreateMessagesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('chat_id', 20);
-            $table->integer('request_id');
+            $table->integer('caller_id');
             $table->integer('user_id');
             $table->string('content', 200);
             $table->string('text', 200);

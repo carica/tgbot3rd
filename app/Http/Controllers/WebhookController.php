@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-class ExampleController extends Controller
+use Illuminate\Http\Request;
+use Log;
+class WebhookController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -14,5 +16,8 @@ class ExampleController extends Controller
         //
     }
 
-    //
+    public function postUpdate(Request $req)
+    {
+        Log::info(json_encode($req->all()));
+    }
 }

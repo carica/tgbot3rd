@@ -11,6 +11,15 @@
 |
 */
 
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'v1'], function() use ($router) {
+    $router->get('status', function() {
+        return response()->json(['test' => 'v1']);
+    });
+});
+
+$router->post(env('BOT_TOKEN'), 'WebhookController@postUpdate');
