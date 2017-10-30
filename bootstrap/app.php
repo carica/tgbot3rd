@@ -81,7 +81,8 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
-
+// $app->register(App\Providers\BotCommandServiceProvider::class);
+// $app->register(App\Providers\BotMessageServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

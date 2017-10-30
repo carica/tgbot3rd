@@ -13,7 +13,7 @@ namespace App\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-use GuzzleHttp\Client;
+use App\Library\TelegramBot\Message;
 
 /**
  * Class WebhookCommand
@@ -28,7 +28,7 @@ class setWebhookCommand extends Command
      *
      * @var string
      */
-    protected $signature = "webhook:set {token}";
+    protected $signature = "webhook:set";
 
     /**
      * The console command description.
@@ -43,27 +43,13 @@ class setWebhookCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(Message $msg)
     {
-        $webhookURL = env('WEBHOOK_URL');
-        $token = env('BOT_TOKEN');
-        $tcpProxy = env('TCP_PROXY');
-        if(strlen($token) > 0 && strlen($webhookURL) > 0) {
-            $client = new Client(['base_uri' => env('BOT_URL') . $token . '/']);
-            $response = $client->request('POST', 'setWebhook', [
-                'form_params' => [
-                        'url' => $webhookURL . $token,
-                    ],
-                'proxy' => [
-                    'http'  => $tcpProxy, // Use this proxy with "http"
-                    'https' => $tcpProxy, // Use this proxy with "https",
-                ],
-            ]);
-            $res = json_decode($response->getBody());
-            $this->info($res->description);
+        if($msg->setWebhook()) {
+            $this->info('webhook set successfully.');
         }
         else {
-            $this->info('webhook url not set');
+            $this->info('failed to set webhook.');
         }
     }
 }

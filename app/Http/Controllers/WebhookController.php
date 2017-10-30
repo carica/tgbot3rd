@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Library\TelegramBot\Command;
 use Log;
+
 class WebhookController extends Controller
 {
     /**
@@ -16,8 +18,9 @@ class WebhookController extends Controller
         //
     }
 
-    public function postUpdate(Request $req)
+    public function postUpdate(Request $req, Command $cmd)
     {
         Log::info(json_encode($req->all()));
+        //split commands and text messages into different services.
     }
 }
