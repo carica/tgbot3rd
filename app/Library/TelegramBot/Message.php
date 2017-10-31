@@ -38,10 +38,22 @@ class Message
     public function setWebhook()
     {
         $response = $this->client->request('POST', 'setWebhook', [
-                'form_params' => [
-                        'url' => $this->webhookURL . $this->token,
-                    ],
+            'form_params' => [
+                    'url' => $this->webhookURL . $this->token,
+                ],
             ]);
+        $res = json_decode($response->getBody());
+        return $res->ok;
+    }
+
+    public function sendMessage(int $chat_id, string $text, mixed $optional = NULL)
+    {
+        $response = $this->client->request('POST', 'sendMessage', [
+            'form_params' => [
+                    'chat_id' => $chat_id,
+                    'text' => $text,
+                ],
+        ]);
         $res = json_decode($response->getBody());
         return $res->ok;
     }
