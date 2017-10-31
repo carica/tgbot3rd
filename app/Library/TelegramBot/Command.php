@@ -4,25 +4,30 @@ namespace App\Library\TelegramBot;
 
 use Exception;
 use Log;
-use App\Library\TelegramBot\Message;
+use App\Library\TelegramBot\Request;
+use App\User;
+use App\Message;
+use App\Caller;
 
 class Command
 {
     protected $commandsAvailable = [
-        '/start',
-        '/help',
-        '/add',
-        '/remove',
-        '/list',
+        'start',
+        'help',
+        'add',
+        'remove',
+        'list',
+        'settings',
     ];
 
     protected $args;
     protected $from;
     protected $to;
+    protected $req;
 
     public function __construct()
     {
-
+        $this->req = new Request();
     }
 
     public function execCommand(string $cmd, string $args, string $from, string $to)
@@ -31,12 +36,10 @@ class Command
             $this->args = $args;
             $this->from = $from;
             $this->to = $to;
-            $this->($cmd . 'Command')();
+            $this->{$cmd . 'Command'}();
         }
         else {
-            if(!$msg->sendMessage($to, 'unknow command')) {
-                Log::error('error send unknow command message to : ' . $to);
-            }
+            $this->req->sendMessage($to, 'unknow command');
         }
     }
 
@@ -47,7 +50,7 @@ class Command
 
     public function helpCommand()
     {
-        
+        $this->req->sendMessage($this->to, 'remember to append name of your service as argument when using add and remove command,');
     }
 
     public function addCommand()
@@ -61,6 +64,11 @@ class Command
     }
 
     public function listCommand()
+    {
+        
+    }
+
+    public function settingsCommand()
     {
         
     }

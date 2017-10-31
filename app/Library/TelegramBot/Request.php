@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 use Exception;
 use Log;
 
-class Message
+class Request
 {
     protected $client;
     protected $token;
@@ -55,6 +55,31 @@ class Message
                 ],
         ]);
         $res = json_decode($response->getBody());
-        return $res->ok;
+        if(!$res->ok) {
+            Log::error('error sendmessage \'' . $text . '\' to : ' . $chat_id);
+        }
     }
+    /*
+    message object returned by tg:
+    {
+        "ok": true,
+        "result": {
+            "message_id": 1,
+            "from": {
+                "id": 222,
+                "first_name": "1",
+                "username": "1"
+            },
+            "chat": {
+                "id": 1,
+                "first_name": "1",
+                "last_name": "1",
+                "username": "1",
+                "type": "private"
+            },
+            "date": 1494207661,
+            "text": "1"
+        }
+    }
+     */
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    protected $fillable = [];
+    protected $fillable = ['tg_user_id'];
     protected $hidden = [];
     
     public function callers()
@@ -17,5 +17,10 @@ class User extends Model
     public function messages()
     {
         return $this->hasMany('App\Message');
+    }
+
+    public function updates()
+    {
+        return $this->hasMany('App\Update');
     }
 }

@@ -13,7 +13,7 @@ namespace App\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-use App\Library\TelegramBot\Message;
+use App\Library\TelegramBot\Request;
 
 /**
  * Class WebhookCommand
@@ -43,9 +43,9 @@ class setWebhookCommand extends Command
      *
      * @return mixed
      */
-    public function handle(Message $msg)
+    public function handle(Request $req)
     {
-        if($msg->setWebhook()) {
+        if($req->setWebhook()) {
             $this->info('webhook set successfully.');
         }
         else {
