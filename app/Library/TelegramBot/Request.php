@@ -46,13 +46,17 @@ class Request
         return $res->ok;
     }
 
-    public function sendMessage(int $chat_id, string $text, mixed $optional = NULL)
+    public function sendMessage(int $chat_id, string $text, array $optional = NULL)
     {
+        $output = [
+            'chat_id' => $chat_id,
+            'text' => $text,
+        ];
+        if(is_array($optional)) {
+            $output += $optional;
+        }
         $response = $this->client->request('POST', 'sendMessage', [
-            'form_params' => [
-                    'chat_id' => $chat_id,
-                    'text' => $text,
-                ],
+            'form_params' => $output,
         ]);
         $res = json_decode($response->getBody());
         if(!$res->ok) {

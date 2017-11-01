@@ -23,7 +23,9 @@ class Command
     protected $args;
     protected $from;
     protected $to;
+    //objects
     protected $req;
+    protected $user;
 
     public function __construct()
     {
@@ -36,6 +38,7 @@ class Command
             $this->args = $args;
             $this->from = $from;
             $this->to = $to;
+            $this->user = User::where('tg_user_id', $from)->firstOrFail();
             $this->{$cmd . 'Command'}();
         }
         else {
@@ -45,7 +48,7 @@ class Command
 
     public function startCommand()
     {
-
+        $this->req->sendMessage($this->to, 'Howdy ' . $this->user->firstname . $this->user->lastname . '! Welcome onboard!\nYou may /add to get service token.');
     }
 
     public function helpCommand()

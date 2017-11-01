@@ -19,7 +19,7 @@ class CreateUpdatesTable extends Migration
             $table->integer('user_id')->index();
             $table->string('text', 200);
             $table->string('chat_id', 20);
-            $table->datetime('upate_time');
+            $table->datetime('update_time');
             $table->integer('type');
             $table->integer('update_id')->unique();
         });
