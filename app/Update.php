@@ -9,6 +9,12 @@ class Update extends Model
 
     //type attribute:
     //command = 1
+    const typeCommand = 1;
+    const typeOther = 0;
+    const requestDone = 1;
+    const requestError = 2;
+    const requestOther = 0;
+
 
     protected $fillable = ['update_id'];
     protected $hidden = [];

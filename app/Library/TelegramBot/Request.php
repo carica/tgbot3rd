@@ -62,6 +62,7 @@ class Request
         if(!$res->ok) {
             Log::error('error sendmessage \'' . $text . '\' to : ' . $chat_id);
         }
+        return $res->ok;
     }
     /*
     message object returned by tg:

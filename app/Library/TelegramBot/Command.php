@@ -39,11 +39,12 @@ class Command
             $this->from = $from;
             $this->to = $to;
             $this->user = User::where('tg_user_id', $from)->firstOrFail();
-            $this->{$cmd . 'Command'}();
+            $res = $this->{$cmd . 'Command'}();
         }
         else {
-            $this->req->sendMessage($to, 'unknow command');
+            $res = $this->req->sendMessage($to, 'unknow command');
         }
+        return $res;
     }
 
     public function startCommand()

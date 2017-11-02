@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 class WebhookController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -79,7 +80,7 @@ class WebhookController extends Controller
             $user->username = $from['username'];
             $user->firstname = $from['first_name'];
             $user->lastname = $from['last_name'];
-            $user->status = 0;
+            $user->status = User::started;
             $user->save();
         }
         $input = $message['text'];
@@ -98,13 +99,13 @@ class WebhookController extends Controller
         }
         //save update object to db
         $update = Update::firstOrNew(['update_id' => $update_id]);
-        if(!isset($update->id)) {
+        if(isset($update->id) && $update->status === Update::requestDone) {
             $update->user_id = $user->id;
             $update->text = $input;
             $update->update_id = $update_id;
             $update->chat_id = $chat_id;
             $update->update_time = Carbon::createFromTimestamp($message['date']);
-            $update->type = $is_command ? 1 : 0; //update type: command = 1
+            $update->type = $is_command ? Update::typeCommand : Update::typeOther; //update type: command = 1
             $update->save();
         }
         //split command and argument

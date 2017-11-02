@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    const started = 0;
+    const called = 1;
+
     protected $fillable = ['tg_user_id'];
     protected $hidden = [];
     
