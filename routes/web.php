@@ -20,6 +20,7 @@ $router->group(['prefix' => 'v1'], function() use ($router) {
     $router->get('status', function() {
         return response()->json(['test' => 'v1']);
     });
+    $router->post('send', 'ServiceController@postSend');
 });
 
 $router->post(env('BOT_TOKEN'), 'WebhookController@postUpdate');

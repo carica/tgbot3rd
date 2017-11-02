@@ -6,7 +6,6 @@ use Exception;
 use Log;
 use App\Library\TelegramBot\Request;
 use App\User;
-use App\Message;
 use App\Caller;
 
 class Command
@@ -49,17 +48,32 @@ class Command
 
     public function startCommand()
     {
-        $this->req->sendMessage($this->to, 'Howdy ' . $this->user->firstname . $this->user->lastname . '! Welcome onboard!\nYou may /add to get service token.');
+        return $this->req->sendMessage($this->to, 'Howdy ' . $this->user->firstname . $this->user->lastname . '! Welcome onboard!\nYou may /add to get service token.');
     }
 
     public function helpCommand()
     {
-        $this->req->sendMessage($this->to, 'remember to append name of your service as argument when using add and remove command,');
+        return $this->req->sendMessage($this->to, 'remember to append name of your service as argument when using add and remove command.');
     }
 
     public function addCommand()
     {
-        
+        if(strlen($this->args) > 0) {
+            $caller = new Caller();
+            $caller->user_id = $this->user->id;
+            $caller->status = Caller::available;
+            $caller->name = substr($this->args, 0, 50); //max 50
+            $caller->description = "not available yet";
+            $caller->save();
+            Log::info('successfully generated new caller: ' . $caller->id);
+            $this->req->sendMessage($this->to, 'new sevice ' . $caller->name . ' generated!\n Its UUID for access is: ' . $caller->uuid);
+            return TRUE;
+        }
+        else {
+            $this->req->sendMessage($this->to, 'name of service missing. usage: /add {name of service}');
+            Log::error('name of service missing, from ' . $this->from);
+            return FALSE;
+        }
     }
 
     public function removeCommand()
@@ -74,6 +88,6 @@ class Command
 
     public function settingsCommand()
     {
-        
+        return TRUE;
     }
 }

@@ -69,8 +69,6 @@ class WebhookController extends Controller
         */
 
         //save to user table in the case of 1st time access.
-        //set status to 0
-        //status is set to 1 if 1st caller uuid is assigned.
         $from = $message['from'];
         $from_id = $from['id'];
         $user = User::firstOrNew(['tg_user_id' => $from_id]);
@@ -99,27 +97,36 @@ class WebhookController extends Controller
         }
         //save update object to db
         $update = Update::firstOrNew(['update_id' => $update_id]);
-        if(isset($update->id) && $update->status === Update::requestDone) {
+        if(isset($update->id) && $update->status !== Update::requestInit) {
+            Log::warning("update $update->id already dealt with.");
+            return;
+        }
+        if(!isset($update->id)) {
             $update->user_id = $user->id;
             $update->text = $input;
             $update->update_id = $update_id;
             $update->chat_id = $chat_id;
             $update->update_time = Carbon::createFromTimestamp($message['date']);
             $update->type = $is_command ? Update::typeCommand : Update::typeOther; //update type: command = 1
+            $update->status = Update::requestInit;
             $update->save();
         }
         //split command and argument
         if($is_command){
             $first_space = strpos($input, ' ');
+            $res = FALSE;
             if($first_space === FALSE) {
-                $cmd->execCommand(substr($input, 1), '', $from_id, $chat_id);
+                $res = $cmd->execCommand(substr($input, 1), '', $from_id, $chat_id);
             }
             else {
-                $cmd->execCommand(substr($input, 1, $first_space - 1), substr($input, $first_space + 1), $from_id, $chat_id);
+                $res = $cmd->execCommand(substr($input, 1, $first_space - 1), substr($input, $first_space + 1), $from_id, $chat_id);
             }
+            $update->status = $res ? Update::requestDone : Update::requestError;
         }
         else {
             Log::warning('unknow message: ' . $message['text']);
+            $update->status = Update::requestError;
         }
+        $update->save();
     }
 }

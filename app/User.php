@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    //status reserved
     const started = 0;
     const called = 1;
 

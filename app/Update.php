@@ -13,7 +13,7 @@ class Update extends Model
     const typeOther = 0;
     const requestDone = 1;
     const requestError = 2;
-    const requestOther = 0;
+    const requestInit = 0;
 
 
     protected $fillable = ['update_id'];
