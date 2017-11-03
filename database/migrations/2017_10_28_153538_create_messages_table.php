@@ -21,7 +21,7 @@ class CreateMessagesTable extends Migration
             $table->integer('user_id');
             $table->string('content', 200);
             $table->string('text', 200);
-            $table->integer('tg_message_id');
+            $table->integer('tg_message_id')->index();
             $table->dateTime('tg_date');
             $table->integer('status');
         });

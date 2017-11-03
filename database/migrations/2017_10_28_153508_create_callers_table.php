@@ -19,9 +19,10 @@ class CreateCallersTable extends Migration
             $table->softDeletes();
             $table->integer('user_id')->index();
             $table->integer('status');
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->string('name', 50);
             $table->string('description', 200);
+            $table->string('chat_id', 20);
         });
     }
 

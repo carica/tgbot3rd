@@ -5,6 +5,7 @@ use GuzzleHttp\Client;
 use Exception;
 use Log;
 
+
 class Request
 {
     protected $client;
@@ -46,6 +47,18 @@ class Request
         return $res->ok;
     }
 
+    /**
+     * send message via telegram bot api
+     * @param  int        $chat_id  chat_id message sent to
+     * @param  string     $text     content
+     * @param  array|null $optional sendmessage options
+     * @return array                [
+     *                                 'ok' => TRUE | FALSE,
+     *                                 'message_id' => ,
+     *                                 'date' => ,
+     *                                 'text' => 
+     *                                 ]
+     */
     public function sendMessage(int $chat_id, string $text, array $optional = NULL)
     {
         $output = [
@@ -61,8 +74,13 @@ class Request
         $res = json_decode($response->getBody());
         if(!$res->ok) {
             Log::error('error sendmessage \'' . $text . '\' to : ' . $chat_id);
+            return ['ok' => $res->ok];
         }
-        return $res->ok;
+        return ['ok' => $res->ok,
+                'message_id' => $res->result->message_id,
+                'date' => $res->result->date,
+                'text' => $res->result->text,
+                ];
     }
     /*
     message object returned by tg:

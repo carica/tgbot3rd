@@ -8,6 +8,9 @@ use App\Library\TelegramBot\Request;
 use App\User;
 use App\Caller;
 
+/**
+ * every command shall return true or false.
+ */
 class Command
 {
     protected $commandsAvailable = [
@@ -42,18 +45,21 @@ class Command
         }
         else {
             $res = $this->req->sendMessage($to, 'unknow command');
+            $res = $res['ok'];
         }
         return $res;
     }
 
     public function startCommand()
     {
-        return $this->req->sendMessage($this->to, 'Howdy ' . $this->user->firstname . $this->user->lastname . '! Welcome onboard!\nYou may /add to get service token.');
+        $res = $this->req->sendMessage($this->to, 'Howdy ' . $this->user->firstname . $this->user->lastname . '! Welcome onboard!\nYou may /add to get service token.');
+        return $res['ok'];
     }
 
     public function helpCommand()
     {
-        return $this->req->sendMessage($this->to, 'remember to append name of your service as argument when using add and remove command.');
+        $res = $this->req->sendMessage($this->to, 'remember to append name of your service as argument when using add and remove command.');
+        return $res['ok'];
     }
 
     public function addCommand()
