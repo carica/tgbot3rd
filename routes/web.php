@@ -24,3 +24,6 @@ $router->group(['prefix' => 'v1'], function() use ($router) {
 });
 
 $router->post(env('BOT_TOKEN'), 'WebhookController@postUpdate');
+$router->get(env('BOT_TOKEN'), function() {
+    return 'hello world';
+});
