@@ -7,6 +7,7 @@ use Log;
 use App\Library\TelegramBot\Request;
 use App\User;
 use App\Caller;
+use App\Message;
 
 /**
  * every command shall return true or false.
@@ -40,7 +41,7 @@ class Command
             $this->args = $args;
             $this->from = $from;
             $this->to = $to;
-            $this->user = User::where('tg_user_id', $from)->firstOrFail();
+            $this->user = User::where('tg_user_id', $from)->first();
             $res = $this->{$cmd . 'Command'}();
         }
         else {
@@ -86,8 +87,7 @@ class Command
     public function removeCommand()
     {
         if(strlen($this->args) > 0) {
-            $caller = Caller::where('uuid', $this->args)->firstOrFail();
-            Log::info($this->args);
+            $caller = Caller::where('uuid', $this->args)->first();
             if(isset($caller) && $caller->user_id === $this->user->id) {
                 $name = $caller->name;
                 $caller_id = $caller->id;
@@ -95,7 +95,7 @@ class Command
                 Message::where('caller_id', $caller_id)->delete();
                 Log::info('successfully deleted caller: ' . $name);
                 $this->req->sendMessage($this->to, 'successfully deleted caller: ' . $name);
-            return TRUE;
+                return TRUE;
             }
             else {
                 Log::info('wrong uuid or no permission: ' . $this->args);
@@ -105,7 +105,7 @@ class Command
         }
         else {
             Log::error('uuid missing, from ' . $this->from);
-            $this->req->sendMessage($this->to, 'uuid missing. usage: /remove {uuid of service}');
+            $this->req->sendMessage($this->to, 'uuid missing. usage: /remove {uuid of service} . try /list to show your uuids.');
             return FALSE;
         }
     }
@@ -113,8 +113,13 @@ class Command
     public function listCommand()
     {
         $callers = Caller::where('user_id', $this->user->id)->get();
-        foreach ($callers as $caller) {
-            $this->req->sendMessage($this->to, 'name: ' . $caller->name . ' uuid: ' . $caller->uuid);
+        if(count($callers) > 0) {
+            foreach ($callers as $caller) {
+                $this->req->sendMessage($this->to, 'name: ' . $caller->name . ' uuid: ' . $caller->uuid);
+            }
+        }
+        else {
+            $this->req->sendMessage($this->to, 'no service found. try /add {name of service} to add some!');
         }
         return TRUE;
     }

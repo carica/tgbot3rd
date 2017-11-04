@@ -10,11 +10,11 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
-
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post(env('BOT_TOKEN'), 'WebhookController@postUpdate');
 
 $router->group(['prefix' => 'v1'], function() use ($router) {
     $router->get('status', function() {
@@ -23,7 +23,5 @@ $router->group(['prefix' => 'v1'], function() use ($router) {
     $router->post('send', 'ServiceController@postSend');
 });
 
-$router->post(env('BOT_TOKEN'), 'WebhookController@postUpdate');
-$router->get(env('BOT_TOKEN'), function() {
-    return 'hello world';
-});
+
+

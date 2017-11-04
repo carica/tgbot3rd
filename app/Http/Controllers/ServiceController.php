@@ -24,7 +24,7 @@ class ServiceController extends Controller
                     $message->tg_date = Carbon::createFromTimestamp($result['date']);
                     $message->chat_id = $caller->chat_id;
                     $message->caller_id = $caller->id;
-                    $message->user_id = $caller->user->id;
+                    $message->user_id = $caller->user_id;
                     $message->content = substr($req->input('message'), 0, 199);
                     $message->text = substr($result['text'], 0, 199);
                     $message->save();
