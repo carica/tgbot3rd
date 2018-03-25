@@ -85,6 +85,7 @@ $app->singleton(
 // $app->register(App\Providers\EventServiceProvider::class);
 // $app->register(App\Providers\BotCommandServiceProvider::class);
 // $app->register(App\Providers\BotMessageServiceProvider::class);
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
