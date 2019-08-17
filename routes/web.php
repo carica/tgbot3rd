@@ -14,8 +14,8 @@
 //     return $router->app->version();
 // });
 
-$router->get('/', 'HuangliController@create');
-$router->post('/', 'HuangliController@new');
+// $router->get('/', 'HuangliController@create');
+// $router->post('/', 'HuangliController@new');
 
 $router->post(env('BOT_TOKEN'), 'WebhookController@postUpdate');
 
