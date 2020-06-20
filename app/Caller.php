@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Uuid;
+use Illuminate\Support\Str;
 
 class Caller extends Model
 {
@@ -33,7 +33,7 @@ class Caller extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->uuid = (string) Uuid::generate(4);
+            $model->uuid = (string) Str::uuid();
         });
     }
 }
